@@ -3,61 +3,36 @@ package agh.ics.oop;
 public class World {
     public static void main(String[] args) {
         System.out.println("Start");
-        run(args);
+        Direction[] enumArr = getEnumArr(args);
+        run(enumArr);
         System.out.println("Stop");
     }
 
-    private static void run(String strarr[]){
-
-        for(String str : strarr){
-            switch (str) {
-                case "f":
-                    System.out.println("Zwierzak idzie Do przodu");
-                    break;
-                case "b":
-                    System.out.println("Zwierzak idzie Do tyłu");
-                    break;
-                case "r":
-                    System.out.println("Zwierzak idzie W prawo");
-                    break;
-                case "l":
-                    System.out.println("Zwierzak idzie W lewo");
-                    break;
+    private static void run(Direction[] enumArr){
+        for(Direction dir : enumArr){
+            switch (dir) {
+                case FORWARD -> System.out.println("Zwierzak idzie do przodu");
+                case BACKWARD -> System.out.println("Zwierzak idzie do tylu");
+                case RIGHT -> System.out.println("Zwierzak skreca w prawo");
+                case LEFT -> System.out.println("Zwierzak skreca W lewo");
             }
         }
-
-        /*
-        System.out.println("zwierzak idzie do przodu");
-        for(int i = 0; i < strarr.length; i++){
-            System.out.print(strarr[i]);
-            if(i != strarr.length - 1 )
-                System.out.print(", ");
-            else
-                System.out.println();
-        }
-        */
     }
-    /*
+
     private static Direction[] getEnumArr(String args[])
     {
-        Direction enumArr[] = new Direction[] {} ;
-        for(String str : args){
-            switch (str) {
-                case "f":
-                    System.out.println("Zwierzak idzie Do przodu");
-                    break;
-                case "b":
-                    System.out.println("Zwierzak idzie Do tyłu");
-                    break;
-                case "r":
-                    System.out.println("Zwierzak idzie W prawo");
-                    break;
-                case "l":
-                    System.out.println("Zwierzak idzie W lewo");
-                    break;
+        Direction[] enumArr = new Direction[args.length];
+
+        for(int i = 0; i < args.length; i++){
+            switch (args[i]) {
+                case "f" -> enumArr[i] = Direction.FORWARD;
+                case "b" -> enumArr[i] = Direction.BACKWARD;
+                case "r" -> enumArr[i] = Direction.RIGHT;
+                case "l" -> enumArr[i] = Direction.LEFT;
             }
         }
+        return enumArr;
     }
-    */
+
 }
 
