@@ -1,10 +1,20 @@
 package agh.ics.oop;
-//test
+import java.util.Arrays;
+import java.util.stream.*;
+
 public class World {
     public static void main(String[] args) {
+        Stream<String> argsStream = Arrays.stream(args);
+        Stream<Direction> directionStream = argsStream.map(str -> switch (str){
+            case "f" -> Direction.FORWARD;
+            case "b" -> Direction.BACKWARD;
+            case "r" -> Direction.RIGHT;
+            case "l" -> Direction.LEFT;
+            default -> null;
+        });
+
         System.out.println("Start");
-        Direction[] enumArr = getEnumArr(args);
-        run(enumArr);
+        run(directionStream.toArray(Direction[]::new));
         System.out.println("Stop");
     }
 
@@ -14,7 +24,7 @@ public class World {
                 case FORWARD -> System.out.println("Zwierzak idzie do przodu");
                 case BACKWARD -> System.out.println("Zwierzak idzie do tylu");
                 case RIGHT -> System.out.println("Zwierzak skreca w prawo");
-                case LEFT -> System.out.println("Zwierzak skreca W lewo");
+                case LEFT -> System.out.println("Zwierzak skreca w lewo");
             }
         }
     }
