@@ -4,8 +4,7 @@ import java.util.stream.*;
 
 public class World {
     public static void main(String[] args) {
-        Stream<String> argsStream = Arrays.stream(args);
-        Stream<Direction> directionStream = argsStream.map(str -> switch (str){
+        Stream<Direction> directionStream = Arrays.stream(args).map(str -> switch (str){
             case "f" -> Direction.FORWARD;
             case "b" -> Direction.BACKWARD;
             case "r" -> Direction.RIGHT;
