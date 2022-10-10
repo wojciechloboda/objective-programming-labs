@@ -4,44 +4,14 @@ import java.util.stream.*;
 
 public class World {
     public static void main(String[] args) {
-        Stream<Direction> directionStream = Arrays.stream(args).map(str -> switch (str){
-            case "f" -> Direction.FORWARD;
-            case "b" -> Direction.BACKWARD;
-            case "r" -> Direction.RIGHT;
-            case "l" -> Direction.LEFT;
-            default -> null;
-        });
 
-        System.out.println("Start");
-        run(directionStream.toArray(Direction[]::new));
-        System.out.println("Stop");
+        MapDirection dir = MapDirection.EAST;
+        dir.toString();
+        //Vector2d position1 = new Vector2d(1,2);
+        //System.out.println(position1);
+        //Vector2d position2 = new Vector2d(-2,1);
+        //System.out.println(position2);
+        //System.out.println(position1.add(position2));
     }
-
-    private static void run(Direction[] enumArr){
-        for(Direction dir : enumArr){
-            switch (dir) {
-                case FORWARD -> System.out.println("Zwierzak idzie do przodu");
-                case BACKWARD -> System.out.println("Zwierzak idzie do tylu");
-                case RIGHT -> System.out.println("Zwierzak skreca w prawo");
-                case LEFT -> System.out.println("Zwierzak skreca w lewo");
-            }
-        }
-    }
-
-    private static Direction[] getEnumArr(String args[])
-    {
-        Direction[] enumArr = new Direction[args.length];
-
-        for(int i = 0; i < args.length; i++){
-            switch (args[i]) {
-                case "f" -> enumArr[i] = Direction.FORWARD;
-                case "b" -> enumArr[i] = Direction.BACKWARD;
-                case "r" -> enumArr[i] = Direction.RIGHT;
-                case "l" -> enumArr[i] = Direction.LEFT;
-            }
-        }
-        return enumArr;
-    }
-
 }
 
