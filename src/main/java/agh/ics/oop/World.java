@@ -5,8 +5,9 @@ import java.util.stream.*;
 public class World {
     public static void main(String[] args) {
 
-        MapDirection dir = MapDirection.EAST;
-        dir.toString();
+        MapDirection dir = MapDirection.NORTH;
+        System.out.println(dir.previous().next().toString());
+
         //Vector2d position1 = new Vector2d(1,2);
         //System.out.println(position1);
         //Vector2d position2 = new Vector2d(-2,1);

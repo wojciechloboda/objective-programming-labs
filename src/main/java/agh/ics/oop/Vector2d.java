@@ -38,8 +38,12 @@ public class Vector2d {
     }
 
     public boolean equals(Object other){
-        //TODO: TYPE CHECKINNG
-        return this.x == ((Vector2d)other).x && this.y == ((Vector2d)other).y;
+        if (this == other)
+            return true;
+
+        if (other instanceof Vector2d that)
+            return this.x == that.x && this.y == that.y;
+        return false;
     }
 
     public Vector2d opposite(){
