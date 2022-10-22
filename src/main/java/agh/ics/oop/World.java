@@ -1,19 +1,14 @@
 package agh.ics.oop;
-import java.util.Arrays;
-import java.util.stream.*;
+import java.util.ArrayList;
 
 public class World {
     public static void main(String[] args) {
-        MapDirection dir = MapDirection.NORTH;
-        System.out.println(dir.previous().next().toString());
-        System.out.println(dir.toUnitVector().toString());
-        System.out.println(" ");
-
-        Vector2d position1 = new Vector2d(1,2);
-        Vector2d position2 = new Vector2d(1,2);
-
-        System.out.println(position1.hashCode());
-        System.out.println(position2.hashCode());
+        Animal animal = new Animal();
+        ArrayList<MoveDirection> directionList = OptionsParser.parse(args);
+        for(MoveDirection dir : directionList){
+            animal.move(dir);
+            System.out.println(animal.toString());
+        }
     }
 }
 
