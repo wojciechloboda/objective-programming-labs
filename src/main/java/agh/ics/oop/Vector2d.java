@@ -47,7 +47,7 @@ public class Vector2d {
     }
 
     public final int hashCode(){
-        return Integer.valueOf(this.x).hashCode() + Integer.valueOf(this.y).hashCode();
+        return x + y;
     }
 
     public Vector2d opposite(){
