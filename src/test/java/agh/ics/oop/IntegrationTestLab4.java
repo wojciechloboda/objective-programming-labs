@@ -13,21 +13,18 @@ public class IntegrationTestLab4 {
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
 
         IWorldMap map = new RectangularMap(5, 5);
-        ArrayList<Vector2d> positions = new ArrayList<>();
-        positions.add(new Vector2d(2,2));
+        Vector2d[] positions = {new Vector2d(2,2)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
 
-        Assertions.assertEquals(new Vector2d(2, 5), engine.getAnimals().get(0).getPosition());
+        Assertions.assertEquals(new Vector2d(2, 4), engine.getAnimals().get(0).getPosition());
     }
 
     @Test
     void test2AnimalsMove(){
         String[] args = {"f", "r", "f", "f"};
-        ArrayList<Vector2d> positions = new ArrayList<>();
-        positions.add(new Vector2d(2,2));
-        positions.add(new Vector2d(2, 3));
+        Vector2d[] positions = {new Vector2d(2,2), new Vector2d(2, 3)};
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
         IWorldMap map = new RectangularMap(5, 5);
@@ -41,9 +38,7 @@ public class IntegrationTestLab4 {
     @Test
     void test2AnimalsPlacement(){
         String[] args = {"f", "r", "f", "f"};
-        ArrayList<Vector2d> positions = new ArrayList<>();
-        positions.add(new Vector2d(3,3));
-        positions.add(new Vector2d(3, 3));
+        Vector2d[] positions = {new Vector2d(3,3), new Vector2d(3, 3)};
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
         IWorldMap map = new RectangularMap(5, 5);
@@ -51,5 +46,18 @@ public class IntegrationTestLab4 {
         engine.run();
 
         Assertions.assertEquals(1, engine.getAnimals().size());
+    }
+
+    @Test
+    void testWithGivenData(){
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        ArrayList<MoveDirection> directions = OptionsParser.parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = {new Vector2d(2,2), new Vector2d(3,4)};
+        SimulationEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+
+        Assertions.assertEquals(new Vector2d(2, 0), engine.getAnimals().get(0).getPosition());
+        Assertions.assertEquals(new Vector2d(3, 4), engine.getAnimals().get(1).getPosition());
     }
 }

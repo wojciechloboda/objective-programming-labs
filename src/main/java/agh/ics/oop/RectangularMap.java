@@ -10,7 +10,7 @@ public class RectangularMap implements IWorldMap{
 
     public RectangularMap(int width, int height){
         boundsLowerLeft = new Vector2d(0, 0);
-        boundsUpperRight = new Vector2d(width, height);
+        boundsUpperRight = new Vector2d(width - 1, height - 1);
     }
 
     @Override
