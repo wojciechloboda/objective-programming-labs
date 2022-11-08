@@ -17,8 +17,7 @@ public class IntegrationTestLab4 {
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
-
-        Assertions.assertEquals(new Vector2d(2, 4), engine.getAnimals().get(0).getPosition());
+        Assertions.assertTrue(map.isOccupied(new Vector2d(2, 4)));
     }
 
     @Test
@@ -31,8 +30,8 @@ public class IntegrationTestLab4 {
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
-        Assertions.assertEquals(new Vector2d(2, 2), engine.getAnimals().get(0).getPosition());
-        Assertions.assertEquals(new Vector2d(3, 3), engine.getAnimals().get(1).getPosition());
+        Assertions.assertTrue(map.isOccupied(new Vector2d(2, 2)));
+        Assertions.assertTrue(map.isOccupied(new Vector2d(3, 3)));
     }
 
     @Test
@@ -41,11 +40,11 @@ public class IntegrationTestLab4 {
         Vector2d[] positions = {new Vector2d(3,3), new Vector2d(3, 3)};
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
-        IWorldMap map = new RectangularMap(5, 5);
+        RectangularMap map = new RectangularMap(5, 5);
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
-        Assertions.assertEquals(1, engine.getAnimals().size());
+        Assertions.assertEquals(1, map.getMapElementsCount());
     }
 
     @Test
@@ -57,7 +56,7 @@ public class IntegrationTestLab4 {
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
-        Assertions.assertEquals(new Vector2d(2, 0), engine.getAnimals().get(0).getPosition());
-        Assertions.assertEquals(new Vector2d(3, 4), engine.getAnimals().get(1).getPosition());
+        Assertions.assertTrue(map.isOccupied(new Vector2d(2, 0)));
+        Assertions.assertTrue(map.isOccupied(new Vector2d(3, 4)));
     }
 }

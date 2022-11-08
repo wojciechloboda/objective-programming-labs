@@ -22,10 +22,6 @@ public class SimulationEngine implements IEngine{
         }
     }
 
-    public List<Animal> getAnimals(){
-        return this.animalList;
-    }
-
     @Override
     public void run() {
         for(int i = 0; i < directionList.size(); i++){

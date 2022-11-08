@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class RectangularMap implements IWorldMap{
-    private ArrayList<Animal> animalList = new ArrayList<Animal>();
+    private final MapVisualizer mVis;
+    private final ArrayList<Animal> animalList = new ArrayList<Animal>();
     private final Vector2d boundsLowerLeft;
     private final Vector2d boundsUpperRight;
+    private int mapElementsCount = 0;
 
     public RectangularMap(int width, int height){
         boundsLowerLeft = new Vector2d(0, 0);
         boundsUpperRight = new Vector2d(width - 1, height - 1);
+        mVis = new MapVisualizer(this);
+    }
+
+    public int getMapElementsCount() {
+        return mapElementsCount;
     }
 
     @Override
@@ -19,12 +26,7 @@ public class RectangularMap implements IWorldMap{
             return false;
         }
 
-        for(var placedAnimal : animalList){
-            if(placedAnimal.isAt(position)){
-                return false;
-            }
-        }
-        return true;
+        return !isOccupied(position);
     }
 
     @Override
@@ -32,19 +34,14 @@ public class RectangularMap implements IWorldMap{
         if(!canMoveTo(animal.getPosition())){
             return false;
         }
-
+        mapElementsCount += 1;
         animalList.add(animal);
         return true;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for(var placedAnimal : animalList){
-            if(placedAnimal.isAt(position)){
-                return true;
-            }
-        }
-        return false;
+        return !(objectAt(position) == null);
     }
 
     @Override
@@ -58,7 +55,6 @@ public class RectangularMap implements IWorldMap{
     }
 
     public String toString(){
-        MapVisualizer mVis = new MapVisualizer(this);
         return mVis.draw(boundsLowerLeft, boundsUpperRight);
     }
 }
