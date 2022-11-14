@@ -12,13 +12,22 @@ public class GrassField extends AbstractWorldMap{
         this.grassElementsCount = grassElementsCount;
         this.initGrass();
 
-        upperRightSightLimit = mapElementsList.get(0).getPosition();
-        lowerLeftSightLimit = mapElementsList.get(0).getPosition();
+
+
+        if(!mapElementsList.isEmpty()){
+            upperRightSightLimit = mapElementsList.get(0).getPosition();
+            lowerLeftSightLimit = mapElementsList.get(0).getPosition();
+        }
+        else{
+            lowerLeftSightLimit = new Vector2d(0 ,0);
+            upperRightSightLimit = new Vector2d(0, 0);
+        }
+
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if(isOccupied(position) && objectAt(position) instanceof Animal){
+        if(objectAt(position) instanceof Animal){
             return false;
         }
 
@@ -33,6 +42,13 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     protected Vector2d getLeftLowerBound(){
+        if(!mapElementsList.isEmpty()){
+            lowerLeftSightLimit = mapElementsList.get(0).getPosition();
+        }
+        else{
+            lowerLeftSightLimit = new Vector2d(0, 0);
+        }
+
         for(var placedElement : mapElementsList){
             lowerLeftSightLimit = lowerLeftSightLimit.lowerLeft(placedElement.getPosition());
         }
@@ -41,6 +57,13 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     protected Vector2d getRightUpperBound() {
+        if(!mapElementsList.isEmpty()){
+            upperRightSightLimit = mapElementsList.get(0).getPosition();
+        }
+        else{
+            upperRightSightLimit = new Vector2d(0, 0);
+        }
+
         for(var placedElement : mapElementsList){
             upperRightSightLimit = upperRightSightLimit.upperRight(placedElement.getPosition());
         }

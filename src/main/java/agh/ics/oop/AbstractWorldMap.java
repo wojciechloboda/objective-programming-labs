@@ -44,7 +44,6 @@ public abstract class AbstractWorldMap implements IWorldMap{
     protected abstract Vector2d getLeftLowerBound();
 
     public String toString(){
-        System.out.println("here");
         return mVis.draw(getLeftLowerBound(), getRightUpperBound());
     }
 
