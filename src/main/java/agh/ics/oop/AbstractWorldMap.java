@@ -1,14 +1,20 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap{
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver{
     protected final MapVisualizer mVis;
-    protected final ArrayList<IMapElement> mapElementsList = new ArrayList<IMapElement>();
-    protected int placedElementsCount = 0;
+    protected final Map<Vector2d, IMapElement> elementsMap = new HashMap<>();
 
     AbstractWorldMap(){
         mVis = new MapVisualizer(this);
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        elementsMap.put(newPosition, elementsMap.remove(oldPosition));
     }
 
     @Override
@@ -19,8 +25,7 @@ public abstract class AbstractWorldMap implements IWorldMap{
         if(!canMoveTo(animal.getPosition())){
             return false;
         }
-        placedElementsCount += 1;
-        mapElementsList.add(animal);
+        elementsMap.put(animal.getPosition(), animal);
         return true;
     }
 
@@ -31,13 +36,7 @@ public abstract class AbstractWorldMap implements IWorldMap{
 
     @Override
     public Object objectAt(Vector2d position) {
-        Object res = null;
-        for(var placedElement : mapElementsList){
-            if(placedElement.isAt(position)){
-                res = placedElement;
-            }
-        }
-        return res;
+        return elementsMap.get(position);
     }
 
     protected abstract Vector2d getRightUpperBound();

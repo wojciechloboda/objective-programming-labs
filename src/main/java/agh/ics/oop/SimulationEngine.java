@@ -6,9 +6,9 @@ import java.util.List;
 public class SimulationEngine implements IEngine{
     private final ArrayList<MoveDirection> directionList;
     private final List<Animal> animalList;
-    private final IWorldMap map;
+    private final AbstractWorldMap map;
 
-    public SimulationEngine(ArrayList<MoveDirection> directionList, IWorldMap map, Vector2d[] initPositions){
+    public SimulationEngine(ArrayList<MoveDirection> directionList, AbstractWorldMap map, Vector2d[] initPositions){
         this.directionList = directionList;
         this.map = map;
         this.animalList = new ArrayList<>();

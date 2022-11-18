@@ -12,7 +12,7 @@ public class IntegrationTestLab4 {
         String[] args = {"f", "f", "f", "f"};
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
 
-        IWorldMap map = new RectangularMap(5, 5);
+        AbstractWorldMap map = new RectangularMap(5, 5);
         Vector2d[] positions = {new Vector2d(2,2)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
@@ -26,7 +26,7 @@ public class IntegrationTestLab4 {
         Vector2d[] positions = {new Vector2d(2,2), new Vector2d(2, 3)};
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
-        IWorldMap map = new RectangularMap(5, 5);
+        AbstractWorldMap map = new RectangularMap(5, 5);
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
@@ -36,7 +36,7 @@ public class IntegrationTestLab4 {
 
     @Test
     void test2AnimalsPlacement(){
-        String[] args = {"f", "r", "f", "f"};
+        String[] args = {""};
         Vector2d[] positions = {new Vector2d(3,3), new Vector2d(3, 3)};
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
@@ -44,14 +44,14 @@ public class IntegrationTestLab4 {
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
 
-        Assertions.assertEquals(1, map.getMapElementsCount());
+        Assertions.assertTrue(map.isOccupied(new Vector2d(3, 3)));
     }
 
     @Test
     void testWithGivenData(){
         String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
-        IWorldMap map = new RectangularMap(10, 5);
+        AbstractWorldMap map = new RectangularMap(10, 5);
         Vector2d[] positions = {new Vector2d(2,2), new Vector2d(3,4)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();

@@ -10,10 +10,6 @@ public class RectangularMap extends AbstractWorldMap{
         boundsUpperRight = new Vector2d(width - 1, height - 1);
     }
 
-    public int getMapElementsCount() {
-        return placedElementsCount;
-    }
-
     @Override
     public boolean canMoveTo(Vector2d position) {
         if(!position.follows(boundsLowerLeft) || !position.precedes(boundsUpperRight)){
@@ -32,6 +28,4 @@ public class RectangularMap extends AbstractWorldMap{
     protected Vector2d getRightUpperBound(){
         return boundsUpperRight;
     }
-
-
 }
