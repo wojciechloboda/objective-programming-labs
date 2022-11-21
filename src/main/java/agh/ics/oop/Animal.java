@@ -18,7 +18,6 @@ public class Animal implements IMapElement{
         this.position = initialPosition;
         this.map = map;
         this.observersList = new ArrayList<IPositionChangeObserver>();
-        this.addObserver(map);
     }
 
     public String toString(){
@@ -50,17 +49,18 @@ public class Animal implements IMapElement{
 
         if(newPosition != null){
             if(map.canMoveTo(newPosition)){
-                positionChanged(this.position, newPosition);
+                Vector2d oldPosition = this.position;
                 this.position = newPosition;
+                positionChanged(oldPosition, newPosition);
             }
         }
     }
 
-    private void addObserver(IPositionChangeObserver observer){
+    public void addObserver(IPositionChangeObserver observer){
         this.observersList.add(observer);
     }
 
-    private void removeObserver(IPositionChangeObserver observer){
+    public void removeObserver(IPositionChangeObserver observer){
         this.observersList.remove(observer);
     }
 

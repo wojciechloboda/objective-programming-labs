@@ -25,6 +25,15 @@ public class GrassField extends AbstractWorldMap{
     }
 
     @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        if(objectAt(newPosition) instanceof Grass){
+            elementsMap.remove(newPosition);
+            placeGrass();
+        }
+        elementsMap.put(newPosition, elementsMap.remove(oldPosition));
+    }
+
+    @Override
     public boolean canMoveTo(Vector2d position) {
         if(objectAt(position) instanceof Animal){
             return false;
