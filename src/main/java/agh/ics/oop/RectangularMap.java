@@ -33,12 +33,12 @@ public class RectangularMap extends AbstractWorldMap{
     }
 
     @Override
-    protected Vector2d getLeftLowerBound(){
+    public Vector2d getLeftLowerBound(){
         return boundsLowerLeft;
     }
 
     @Override
-    protected Vector2d getRightUpperBound(){
+   public Vector2d getRightUpperBound(){
         return boundsUpperRight;
     }
 }

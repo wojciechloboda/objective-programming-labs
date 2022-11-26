@@ -45,12 +45,12 @@ public class GrassField extends AbstractWorldMap{
     }
 
     @Override
-    protected Vector2d getLeftLowerBound(){
+    public Vector2d getLeftLowerBound(){
         return mapBoundry.getLeftLowerBound();
     }
 
     @Override
-    protected Vector2d getRightUpperBound() {
+    public Vector2d getRightUpperBound() {
         return mapBoundry.getRightUpperBound();
     }
 

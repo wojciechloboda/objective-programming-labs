@@ -34,8 +34,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return elementsMap.get(position);
     }
 
-    protected abstract Vector2d getRightUpperBound();
-    protected abstract Vector2d getLeftLowerBound();
+    public abstract Vector2d getRightUpperBound();
+    public abstract Vector2d getLeftLowerBound();
 
     public String toString(){
         return mVis.draw(getLeftLowerBound(), getRightUpperBound());
