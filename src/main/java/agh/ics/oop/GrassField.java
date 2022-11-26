@@ -4,30 +4,20 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GrassField extends AbstractWorldMap{
     private final int grassElementsCount;
-    private Vector2d upperRightSightLimit;
-    private Vector2d lowerLeftSightLimit;
+    private final MapBoundry mapBoundry;
 
     public GrassField(int grassElementsCount){
         super();
+        mapBoundry = new MapBoundry();
         this.grassElementsCount = grassElementsCount;
         this.initGrass();
-
-        if(!elementsMap.isEmpty()){
-            Vector2d existingPosition = elementsMap.keySet().iterator().next();
-            upperRightSightLimit = elementsMap.get(existingPosition).getPosition();
-            lowerLeftSightLimit = elementsMap.get(existingPosition).getPosition();
-        }
-        else{
-            lowerLeftSightLimit = new Vector2d(0 ,0);
-            upperRightSightLimit = new Vector2d(0, 0);
-        }
-
     }
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         if(objectAt(newPosition) instanceof Grass){
             elementsMap.remove(newPosition);
+            mapBoundry.removeElement(newPosition, MapElementTypes.GRASS);
             placeGrass();
         }
         elementsMap.put(newPosition, elementsMap.remove(oldPosition));
@@ -39,39 +29,29 @@ public class GrassField extends AbstractWorldMap{
             return false;
         }
 
-        if(objectAt(position) instanceof Grass){
-            elementsMap.remove(position);
-            placeGrass();
-        }
+        return true;
+    }
 
+    @Override
+    public boolean place (Animal animal) throws IllegalArgumentException{
+        if(!canMoveTo(animal.getPosition())){
+            throw new IllegalArgumentException("Position " + animal.getPosition() + " is already taken by another animal");
+        }
+        animal.addObserver(this);
+        animal.addObserver(this.mapBoundry);
+        elementsMap.put(animal.getPosition(), animal);
+        mapBoundry.addElement(animal.getPosition(), MapElementTypes.ANIMAL);
         return true;
     }
 
     @Override
     protected Vector2d getLeftLowerBound(){
-        if(elementsMap.isEmpty()){
-            lowerLeftSightLimit = new Vector2d(0, 0);
-        }
-
-        lowerLeftSightLimit = elementsMap.keySet().iterator().next();
-        for(var placedElementPosition : elementsMap.keySet()){
-            lowerLeftSightLimit = lowerLeftSightLimit.lowerLeft(placedElementPosition);
-        }
-        return lowerLeftSightLimit;
+        return mapBoundry.getLeftLowerBound();
     }
 
     @Override
     protected Vector2d getRightUpperBound() {
-        if(elementsMap.isEmpty()){
-            upperRightSightLimit = new Vector2d(0, 0);
-            return upperRightSightLimit;
-        }
-
-        upperRightSightLimit = elementsMap.keySet().iterator().next();
-        for(var placedElementPosition : elementsMap.keySet()){
-            upperRightSightLimit = upperRightSightLimit.upperRight(placedElementPosition);
-        }
-        return upperRightSightLimit;
+        return mapBoundry.getRightUpperBound();
     }
 
     private Vector2d generateRandomPositionForGrass(){
@@ -90,6 +70,7 @@ public class GrassField extends AbstractWorldMap{
         while(isOccupied(generatedPosition));
 
         elementsMap.put(generatedPosition, new Grass(generatedPosition));
+        mapBoundry.addElement(generatedPosition, MapElementTypes.GRASS);
     }
 
     private void initGrass(){

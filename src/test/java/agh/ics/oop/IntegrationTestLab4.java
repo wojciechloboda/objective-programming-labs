@@ -41,10 +41,9 @@ public class IntegrationTestLab4 {
 
         ArrayList<MoveDirection> directions = OptionsParser.parse(args);
         RectangularMap map = new RectangularMap(5, 5);
-        SimulationEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
 
-        Assertions.assertTrue(map.isOccupied(new Vector2d(3, 3)));
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class,() -> new SimulationEngine(directions, map, positions));
+        Assertions.assertEquals( "Position (3,3) is already taken by another animal", exception.getMessage());
     }
 
     @Test
@@ -58,5 +57,13 @@ public class IntegrationTestLab4 {
 
         Assertions.assertTrue(map.isOccupied(new Vector2d(2, 0)));
         Assertions.assertTrue(map.isOccupied(new Vector2d(3, 4)));
+    }
+
+    @Test
+    void testParserThrowingException(){
+        String[] args = {"f", "b", "r", "l", "f", "vololo", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class,() -> OptionsParser.parse(args));
+        Assertions.assertEquals( "vololo is not legal move specification", exception.getMessage());
     }
 }

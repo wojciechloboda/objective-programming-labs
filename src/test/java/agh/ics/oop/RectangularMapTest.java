@@ -9,13 +9,13 @@ public class RectangularMapTest {
     public void TestPlace(){
         Animal a1 = new Animal(map, new Vector2d(2, 2));
         Animal a2 = new Animal(map, new Vector2d(0, 0));
-        Animal a3 = new Animal(map, new Vector2d(0, 0));
-        Animal a4 = new Animal(map, new Vector2d(100, 100));
+        Animal a3 = new Animal(map, new Vector2d(100, 100));
 
         Assertions.assertTrue(map.place(a1));
         Assertions.assertTrue(map.place(a2));
-        Assertions.assertFalse(map.place(a3));
-        Assertions.assertFalse(map.place(a4));
+
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> map.place(a3));
+        Assertions.assertEquals("Position (100,100) is out of map bounds", exception.getMessage());
     }
 
     @Test
@@ -50,6 +50,16 @@ public class RectangularMapTest {
 
         Assertions.assertEquals(a1, map.objectAt(new Vector2d(2, 2)));
         Assertions.assertNull(map.objectAt(new Vector2d(0, 0)));
+    }
+
+    @Test
+    public void testWrongAnimalPlacement(){
+        Animal a1 = new Animal(map, new Vector2d(0, 0));
+        Animal a2 = new Animal(map, new Vector2d(0, 0));
+
+        Assertions.assertTrue(map.place(a1));
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class, () -> map.place(a2));
+        Assertions.assertEquals("Position (0,0) is already taken by another animal", exception.getMessage());
     }
 
 

@@ -1,6 +1,5 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,13 +20,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public abstract boolean canMoveTo(Vector2d position);
 
     @Override
-    public boolean place(Animal animal) {
-        if(!canMoveTo(animal.getPosition())){
-            return false;
-        }
-        animal.addObserver(this);
-        elementsMap.put(animal.getPosition(), animal);
-        return true;
+    public boolean place (Animal animal){
+        return false;
     }
 
     @Override
@@ -46,6 +40,4 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public String toString(){
         return mVis.draw(getLeftLowerBound(), getRightUpperBound());
     }
-
-
 }

@@ -11,6 +11,19 @@ public class RectangularMap extends AbstractWorldMap{
     }
 
     @Override
+    public boolean place (Animal animal) throws IllegalArgumentException{
+        if(!canMoveTo(animal.getPosition())){
+            if(!animal.getPosition().follows(boundsLowerLeft) || !animal.getPosition().precedes(boundsUpperRight)){
+                throw new IllegalArgumentException("Position " + animal.getPosition() + " is out of map bounds");
+            }
+            throw new IllegalArgumentException("Position " + animal.getPosition() + " is already taken by another animal");
+        }
+        animal.addObserver(this);
+        elementsMap.put(animal.getPosition(), animal);
+        return true;
+    }
+
+    @Override
     public boolean canMoveTo(Vector2d position) {
         if(!position.follows(boundsLowerLeft) || !position.precedes(boundsUpperRight)){
             return false;
