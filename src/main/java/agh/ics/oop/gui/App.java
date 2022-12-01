@@ -2,19 +2,27 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class App extends Application {
-    AbstractWorldMap map;
+public class App extends Application implements IPositionChangeObserver {
+    private AbstractWorldMap map;
+    private Stage primaryStage;
+    private GridPane grid;
+    private final int moveDelay = 600;
+    private SimulationEngine engine;
+    private final List<GuiElementBox> elementsList = new ArrayList<>();
 
     private int getMapSizeInRows(){
         return map.getRightUpperBound().subtract(map.getLeftLowerBound()).y + 1;
@@ -53,16 +61,17 @@ public class App extends Application {
 
     private void fillGridWithMapElements(GridPane grid){
         int gridInsideHeight = getMapSizeInRows();
-        Label mapElementLabel;
+        int elementInd = 0;
 
         for(int x = map.getLeftLowerBound().x; x <= map.getRightUpperBound().x; x++){
             for(int y = map.getLeftLowerBound().y; y <= map.getRightUpperBound().y; y++){
                 Vector2d position = new Vector2d(x, y);
                 if(map.isOccupied(position)){
-                    mapElementLabel = createLabel(map.objectAt(position).toString());
                     int currentColumn = x - map.getLeftLowerBound().x + 1;
                     int currentRow = gridInsideHeight - (y - map.getLeftLowerBound().y);
-                    grid.add(mapElementLabel, currentColumn, currentRow);
+                    grid.add(elementsList.get(elementInd).updateAndGetElementVBox((IMapElement) map.objectAt(position)),
+                            currentColumn, currentRow);
+                    elementInd += 1;
                 }
             }
         }
@@ -74,6 +83,9 @@ public class App extends Application {
         int width = 50;
         int height = 50;
 
+        grid.getRowConstraints().clear();
+        grid.getColumnConstraints().clear();
+
         for(int i = 0; i <= gridRowsCount; i++){
             grid.getRowConstraints().add(new RowConstraints(height));
         }
@@ -84,35 +96,73 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.init();
 
-        GridPane grid = new GridPane();
-
+        grid = new GridPane();
+        grid.setGridLinesVisible(true);
         setGridConstraints(grid);
         setGridLegend(grid);
         fillGridWithMapElements(grid);
-        grid.setGridLinesVisible(true);
 
-        Scene scene = new Scene(grid);
+        TextField directionTextField = new TextField();
 
+        Button startButton = new Button("Start");
+        startButton.setOnAction(e -> {
+            String[] args = directionTextField.getText().split(" ");
+            var directionList = OptionsParser.parse(args);
+            engine.setDirections(directionList);
+            Thread engineThread = new Thread(engine);
+            engineThread.start();
+        });
+
+        HBox hbox = new HBox(startButton, directionTextField);
+        VBox vbox = new VBox(grid, hbox);
+        Scene scene = new Scene(vbox);
+
+        this.primaryStage = primaryStage;
         primaryStage.setScene(scene);
+
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
     @Override
     public void init(){
-        String[] args = getParameters().getRaw().toArray(new String[0]);
-
         try{
-            ArrayList<MoveDirection> directions = OptionsParser.parse(args);
+            int grassElementsCount = 10;
             map = new GrassField(10);
             Vector2d[] positions = {new Vector2d(2,2), new Vector2d(3,4)};
-            IEngine engine = new SimulationEngine(directions, map, positions);
-            engine.run();
+
+            int elementsCount = grassElementsCount + positions.length;
+            for(int i = 0; i < elementsCount; i++){
+                elementsList.add(new GuiElementBox());
+            }
+
+            this.engine = new SimulationEngine(map, positions);
+            this.engine.addObserver(this);
         }
         catch(IllegalArgumentException ex){
             System.out.println(ex.getMessage());
+        }
+    }
+
+    private void updateGrid(){
+        grid.getChildren().retainAll(grid.getChildren().get(0));
+        setGridConstraints(grid);
+        setGridLegend(grid);
+        fillGridWithMapElements(grid);
+        primaryStage.show();
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        Platform.runLater(this::updateGrid);
+
+        try{
+            Thread.sleep(moveDelay);
+        } catch (InterruptedException e) {
+            System.out.println("Simulation stoped");
         }
     }
 }

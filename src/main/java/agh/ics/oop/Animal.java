@@ -69,4 +69,15 @@ public class Animal implements IMapElement{
             observer.positionChanged(oldPosition, newPosition);
         }
     }
+
+    @Override
+    public String getResourcePath() {
+        String path = "src/main/resources/";
+        return switch(direction){
+            case SOUTH -> path + "down.png";
+            case NORTH -> path + "up.png";
+            case EAST -> path + "right.png";
+            case WEST -> path + "left.png";
+        };
+    }
 }

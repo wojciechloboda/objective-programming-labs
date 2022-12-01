@@ -15,4 +15,6 @@ public interface IMapElement {
     TODO
      */
     String toString();
+
+    String getResourcePath();
 }
