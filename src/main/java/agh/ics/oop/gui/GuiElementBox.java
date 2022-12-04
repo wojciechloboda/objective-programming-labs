@@ -45,7 +45,6 @@ public class GuiElementBox{
         else{
             elementLabel.setText(element.getPosition().toString());
         }
-
         imageView.setImage(loadImage(element));
 
         return this.elementVBox;

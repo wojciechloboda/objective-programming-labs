@@ -3,10 +3,10 @@ package agh.ics.oop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationEngine implements IEngine, IPositionChangeObserver, Runnable{
+public class SimulationEngine implements IEngine, Runnable{
     private ArrayList<MoveDirection> directionList;
     private final List<Animal> animalList = new ArrayList<>();
-    private final List<IPositionChangeObserver> observersList = new ArrayList<>();
+    private final List<IMoveObserver> observersList = new ArrayList<>();
 
     private void setupAnimals(AbstractWorldMap map, Vector2d[] initPositions){
         for(var pos : initPositions){
@@ -14,7 +14,6 @@ public class SimulationEngine implements IEngine, IPositionChangeObserver, Runna
 
             if(map.place(newAnimal)){
                 animalList.add(newAnimal);
-                newAnimal.addObserver(this);
             }
         }
     }
@@ -37,25 +36,21 @@ public class SimulationEngine implements IEngine, IPositionChangeObserver, Runna
     public void run() {
         for(int i = 0; i < directionList.size(); i++){
             animalList.get(i % animalList.size()).move(directionList.get(i));
+            notifyObservers();
         }
     }
 
-    public void addObserver(IPositionChangeObserver observer){
+    public void addObserver(IMoveObserver observer){
         this.observersList.add(observer);
     }
 
-    public void removeObserver(IPositionChangeObserver observer){
+    public void removeObserver(IMoveObserver observer){
         this.observersList.remove(observer);
     }
 
-    private void notifyObservers(Vector2d oldPosition, Vector2d newPosition){
+    private void notifyObservers(){
         for(var observer : this.observersList){
-            observer.positionChanged(oldPosition, newPosition);
+            observer.moveHappened();
         }
-    }
-
-    @Override
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        notifyObservers(oldPosition, newPosition);
     }
 }
