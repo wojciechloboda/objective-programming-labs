@@ -15,11 +15,10 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App extends Application implements IPositionChangeObserver, IMoveObserver{
+public class App extends Application implements IMoveObserver{
     private AbstractWorldMap map;
     private Stage primaryStage;
     private GridPane grid;
-    private final int moveDelay = 600;
     private SimulationEngine engine;
     private final List<GuiElementBox> elementsList = new ArrayList<>();
 
@@ -113,6 +112,7 @@ public class App extends Application implements IPositionChangeObserver, IMoveOb
             engine.setDirections(directionList);
             Thread engineThread = new Thread(engine);
             engineThread.start();
+
         });
 
         HBox hbox = new HBox(startButton, directionTextField);
@@ -138,7 +138,7 @@ public class App extends Application implements IPositionChangeObserver, IMoveOb
                 elementsList.add(new GuiElementBox());
             }
 
-            this.engine = new SimulationEngine(map, positions);
+            this.engine = new SimulationEngine(map, positions, 600);
             this.engine.addObserver(this);
         }
         catch(IllegalArgumentException ex){
@@ -155,24 +155,7 @@ public class App extends Application implements IPositionChangeObserver, IMoveOb
     }
 
     @Override
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        Platform.runLater(this::updateGrid);
-
-        try{
-            Thread.sleep(moveDelay);
-        } catch (InterruptedException e) {
-            System.out.println("Simulation stoped");
-        }
-    }
-
-    @Override
     public void moveHappened() {
         Platform.runLater(this::updateGrid);
-
-        try{
-            Thread.sleep(moveDelay);
-        } catch (InterruptedException e) {
-            System.out.println("Simulation stoped");
-        }
     }
 }

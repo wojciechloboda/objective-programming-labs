@@ -24,7 +24,7 @@ public class GuiElementBox{
         elementVBox.setAlignment(Pos.CENTER);
     }
 
-    private Image loadImage(IMapElement element){
+    private static Image loadImage(IMapElement element){
         Image image;
 
         try{
@@ -32,7 +32,7 @@ public class GuiElementBox{
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(2);
             return null;
         }
         return image;
